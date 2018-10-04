@@ -1,4 +1,6 @@
 .idea/
 datastructure.iml
 target/
-
+pom.xml
+src/main/java/com/test/
+.gitignore

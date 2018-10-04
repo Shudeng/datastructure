@@ -1,5 +1,7 @@
 package com.priorityqueue;
 
+import com.common.BinomialHeapPrinter;
+
 import java.util.ArrayList;
 import java.util.List;
 

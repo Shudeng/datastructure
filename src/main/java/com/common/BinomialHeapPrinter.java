@@ -1,14 +1,13 @@
-package com.priorityqueue;
+package com.common;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.GlyphVector;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.List;
 
+import com.priorityqueue.BinomiaHeap;
 import com.priorityqueue.BinomiaHeap.BinomialNode;
 /**
  * Created by Wushudeng on 2018/9/8.
@@ -132,10 +131,10 @@ public class BinomialHeapPrinter extends JFrame{
 
     }
     public static void main(String[] args) {
-//        BinomialHeapPrinter binomialHeapPrinter = new BinomialHeapPrinter(null);
-//        binomialHeapPrinter.setSize(1000, 1000);
-//        binomialHeapPrinter.setVisible(true);
-        getWidthBydegree(2);
+        BinomialHeapPrinter binomialHeapPrinter = new BinomialHeapPrinter(null);
+        binomialHeapPrinter.setSize(1000, 1000);
+        binomialHeapPrinter.setVisible(true);
+//        getWidthBydegree(2);
     }
 
 

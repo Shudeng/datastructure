@@ -1,8 +1,8 @@
-package com.tree;
+package com.priorityqueue;
 
 import com.common.BNode;
 import com.common.BTreePrinter;
-import java.util.HashMap;
+
 import java.util.Random;
 
 /**
@@ -36,6 +36,13 @@ public class Treap<T extends Comparable<? super T>> {
     }
 
     TreapNode<T> root;
+
+    public Treap(TreapNode<T> root) {
+        this.root = root;
+    }
+
+    public Treap() {
+    }
 
     public TreapNode<T> find(TreapNode<T> node, T key) {
         if (node == null) {
@@ -174,6 +181,71 @@ public class Treap<T extends Comparable<? super T>> {
         return delete(root, null, key);
     }
 
+    /**
+     * [node1, x, node2] = split(T, key)
+     * @param node
+     * @param key
+     * @return
+     */
+    public TreapNode<T>[] split(TreapNode<T> node, T key) {
+       TreapNode<T> [] nodes = new TreapNode[3];
+       if (node == null) {
+           nodes[0] = nodes[1] = nodes[2] = null;
+           return nodes;
+       }
+
+       if (node.key.compareTo(key) == 0) {
+           nodes[0] = node.left;
+           nodes[1] = node;
+           nodes[2] = node.right;
+       } else if (node.key.compareTo(key) < 0) {
+           TreapNode<T> [] temp_nodes = split(node.right, key);
+           node.right = temp_nodes[0];
+           nodes[0] = node;
+           nodes[1] = temp_nodes[1];
+           nodes[2] = temp_nodes[2];
+        } else {
+           TreapNode<T>[] temp_nodes = split(node.left, key);
+           node.left = temp_nodes[2];
+           nodes[0] = temp_nodes[0];
+           nodes[1] = temp_nodes[1];
+           nodes[2] = node;
+       }
+       return nodes;
+    }
+
+    /**
+     * node1 and node2 have no common element.
+     * @param node1
+     * @param node2
+     * @return
+     */
+    public TreapNode<T> join(TreapNode<T> node1, TreapNode<T> node2) {
+        if (node1 == null) {
+            return node2;
+        }
+
+        if (node2 == null) {
+            return node1;
+        }
+
+        if (node1.priority < node2.priority) {
+            TreapNode<T> right = join(node1.right, node2);
+            node1.right = right;
+            return node1;
+        } else {
+            TreapNode<T> left = join(node1, node2.left);
+            node2.left = left;
+            return node2;
+        }
+    }
+
+    public static void test(TreapNode<Integer> node, Integer t) {
+//        node = new TreapNode<Integer>(t);
+        node.key =  100;
+        System.out.println(node.key);
+    }
+
     private void print() {
         BNode<String> node = node_change(root);
         BTreePrinter.printNode(node);
@@ -195,26 +267,43 @@ public class Treap<T extends Comparable<? super T>> {
      * @param args
      */
 
-
+    /**
+     * todo
+     * set opereations of treap : union, intersection, difference
+     * @param
+     */
 
 
     public static void main(String[] args) {
         Treap<Integer> treap = new Treap<Integer>();
-        Integer[] list = {7,4,6,9,11,12,23, 45, 67, 80, 25, 89, 18, 32};
+        Integer[] list = {7,4,6,9,11,12,23, 45, 32};
         for (Integer item:list) {
             treap.insert(item);
         }
-        treap.print();
-        try {
-            treap.delete(12);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("--------------------------------------");
-        treap.print();
+//        treap.print();
 
-        TreapNode<Integer> node = treap.find(treap.root, 80);
-        System.out.println(node.key);
-        System.out.println(node.priority);
+        TreapNode<Integer>[] nodes = treap.split(treap.root,23);
+
+        new Treap<Integer>(nodes[0]).print();
+        System.out.println("----------------------------------------");
+        new Treap<Integer>(nodes[2]).print();
+        TreapNode<Integer> join_node = treap.join(nodes[0], nodes[2]);
+        System.out.println("----------------------------------------");
+        new Treap<Integer>(join_node).print();
+
+//        treap.print();
+//        try {
+//            treap.delete(12);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("--------------------------------------");
+//        treap.print();
+//
+//        TreapNode<Integer> node = treap.find(treap.root, 80);
+//        System.out.println(node.key);
+//        System.out.println(node.priority);
     }
+
+
 }
