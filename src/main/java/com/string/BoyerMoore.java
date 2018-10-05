@@ -141,32 +141,39 @@ public class BoyerMoore {
         return -1;
     }
 
-    public static int bm_use_gs(String text, String pattern) {
-        return 0;
+    private static HashMap<Character, Integer> build_bc(String pattern) {
+        HashMap<Character, Integer> hashMap = new HashMap<>();
+        //hashmap record the last position of one character.
+        for (int i=0; i<pattern.length(); i++) {
+            hashMap.put(pattern.charAt(i), i);
+        }
+        return hashMap;
+    }
+
+    public static int bm_use_gs_and_bs(String text, String pattern) {
+        int len = pattern.length();
+        int pattern_i, text_match_i=len-1, text_match_j=len-1;
+        HashMap<Character, Integer> bc = build_bc(pattern);
+        int [] gs = build_gs(build_ss_quickly(pattern));
+        int bc_offset, gs_offset;
+        while (text_match_j < text.length()) {
+            pattern_i = len-1;
+            for (;pattern_i>=0 && pattern.charAt(pattern_i)==text.charAt(text_match_i); pattern_i--, text_match_i--);
+            if (pattern_i==-1)
+                return text_match_i+1;
+            bc_offset = pattern_i-bc.get(pattern.charAt(pattern_i));
+            gs_offset = gs[pattern_i];
+            int offset = bc_offset > gs_offset ? bc_offset : gs_offset;
+            text_match_i = text_match_j = text_match_j+offset;
+        }
+        return -1;
     }
 
     public static void main(String[] args) {
-//        String text = "heljavahelloworld";
-//        String pattern = "jva";
-//        int position = bm_use_bc(text, pattern);
-//        System.out.println(position);
-        String pattern = "PHILADELPHIA";
-        int[] ss = build_ss_violently(pattern);
-        for (int i=0; i<pattern.length(); i++) {
-            System.out.print(ss[i]+"\t");
-        }
-
-        System.out.println();
-        ss = build_ss_quickly(pattern);
-        int[] gs = build_gs(ss);
-        for (int i=0; i<pattern.length(); i++) {
-            System.out.print(ss[i]+"\t");
-        }
-        System.out.println();
-        for (int i=0; i<pattern.length(); i++) {
-            System.out.print(gs[i]+"\t");
-        }
-
+        String text = "nihaobeijingnihaohello";
+        String pattern = "beijing";
+        System.out.println(bm_use_bc(text, pattern));
+        System.out.println(bm_use_gs_and_bs(text, pattern));
     }
 
 
