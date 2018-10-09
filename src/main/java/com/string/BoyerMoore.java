@@ -53,19 +53,33 @@ public class BoyerMoore {
         int len = pattern.length();
         // the match string length of the last character is the pattern itself, whose length is len.
         ss[len-1] = len;
-        // starting from the last second character, calculate the ss value of each position.
-        int lo = len-2, hi=lo;
-        for (int j=lo; j>=0; j--) {
-            // use the existing search result.
-            // hi-j is the path length which is already searched.
-            // len-1 -(hi-j) is the position of certain character whose length away from the last is the same as hi-j.
-            if (lo<j && ss[len-hi+j-1] <= j-lo) {
-                ss[j] = ss[len-hi+j-1];
-            } else {
-                hi = j;
-                lo = Math.min(hi, lo);
-                while ( (0<=lo) && (pattern.charAt(lo) == pattern.charAt(len-1-(hi-lo))) )
-                    lo--;
+
+        int lo, hi, j;
+        lo=hi=j=len-2;
+        for (; j>=0 ;j--) {
+            if (lo < j && ss[len-1-(hi-j)]<j-lo)
+                ss[j] = ss[len-1-(hi-j)];
+            else {
+                for (hi=j, lo=Math.min(lo, hi); lo >= 0 && pattern.charAt(lo) == pattern.charAt(len-1-(hi-lo)); lo--);
+                ss[j] = hi-lo;
+            }
+        }
+        return ss;
+    }
+
+    private static int[] build_ss_another(String pattern) {
+        int[] ss = new int[pattern.length()];
+        int len = pattern.length();
+        // the match string length of the last character is the pattern itself, whose length is len.
+        ss[len-1] = ss.length;
+
+        int lo, hi, j;
+        lo=hi=j=len-2;
+        for (; j>=0 ; j--) {
+            if (ss[j+1] != 0 && ss[len-1-(hi-j)]<j-lo)
+                ss[j] = ss[len-1-(hi-j)];
+            else {
+                for (hi=j, lo=Math.min(lo, hi); lo >= 0 && pattern.charAt(lo) == pattern.charAt(len-1-(hi-lo)); lo--);
                 ss[j] = hi-lo;
             }
         }
@@ -127,6 +141,9 @@ public class BoyerMoore {
 
             // if the bad code exist in pattern after the pattern_i position.
             // why? to suit the good suffix algorithm or some other reasons? I don't figure it out.
+            // follow above second line, why do this, it is because you don't know what the bad code is,
+            // if you want to know the precise bad code position, you should use 2-d array.
+
             if (index > pattern_i) {
                 offset = 1;
             } else {
@@ -150,7 +167,7 @@ public class BoyerMoore {
         return hashMap;
     }
 
-    public static int bm_use_gs_and_bs(String text, String pattern) {
+    public static int bm_use_gs_and_bc(String text, String pattern) {
         int len = pattern.length();
         int pattern_i, text_match_i=len-1, text_match_j=len-1;
         HashMap<Character, Integer> bc = build_bc(pattern);
@@ -173,7 +190,7 @@ public class BoyerMoore {
         String text = "nihaobeijingnihaohello";
         String pattern = "beijing";
         System.out.println(bm_use_bc(text, pattern));
-        System.out.println(bm_use_gs_and_bs(text, pattern));
+        System.out.println(bm_use_gs_and_bc(text, pattern));
     }
 
 
