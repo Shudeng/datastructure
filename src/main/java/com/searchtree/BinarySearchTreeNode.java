@@ -15,6 +15,7 @@ public class BinarySearchTreeNode<T extends Comparable<? super T>> implements Co
     public BinarySearchTreeNode() {
     }
 
+
     @Override
     public String toString() {
         return data.toString();

@@ -6,6 +6,13 @@ import com.common.BinarySearchTreePrinter;
  * Created by Wushudeng on 2018/10/12.
  */
 public abstract class AbstractBinarySearchTree <T extends Comparable<? super T>>{
+    public AbstractBinarySearchTree(BinarySearchTreeNode<T> root) {
+        this.root = root;
+    }
+
+    public AbstractBinarySearchTree() {
+    }
+
     BinarySearchTreeNode<T> root = null;
     abstract public void insert(T data) throws Exception;
     abstract public void remove(T data) throws Exception;

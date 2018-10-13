@@ -4,10 +4,18 @@ package com.searchtree;
  * Created by Wushudeng on 2018/10/13.
  */
 public class SprayTree<T extends Comparable<? super T>> extends AbstractBinarySearchTree<T> {
+    public SprayTree(BinarySearchTreeNode<T> root) {
+        super(root);
+    }
+
+    public SprayTree() {
+    }
+
     /**
      * rotate from left to right pivoted at node
      * @param node
      */
+
     private BinarySearchTreeNode<T> zig(BinarySearchTreeNode<T> node) {
         BinarySearchTreeNode<T> parent = node.parent, left = node.left;
         node.left = left.right;
@@ -132,7 +140,15 @@ public class SprayTree<T extends Comparable<? super T>> extends AbstractBinarySe
 
     @Override
     public void remove(T data) throws Exception {
+        search(data);
+        if (root.data.compareTo(data) != 0)
+            throw new Exception(data+" does not exist");
 
+        BinarySearchTreeNode<T> left = root.left, right = root.right;
+        SprayTree<T> new_tree = new SprayTree<>(right);
+        new_tree.search(data);
+        root = new_tree.root;
+        root.left = left;
     }
 
     @Override
@@ -165,6 +181,11 @@ public class SprayTree<T extends Comparable<? super T>> extends AbstractBinarySe
         sprayTree.search(1);
         sprayTree.search(3);
         sprayTree.search(19);
+        try {
+            sprayTree.remove(5);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         sprayTree.print();
     }
 }
