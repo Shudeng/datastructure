@@ -17,7 +17,7 @@ public abstract class BinaryTreePrinter extends JFrame {
     private List<Line> print_lines = new ArrayList<>();
     private int count;
     private static int oval_width = 10, oval_height = 10;
-    private static int node_gap = 10;
+    private static int node_gap = 30;
 
 
     public static class BinaryTreePrintNode {
