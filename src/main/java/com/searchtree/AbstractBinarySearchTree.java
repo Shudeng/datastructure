@@ -10,11 +10,10 @@ public abstract class AbstractBinarySearchTree <T extends Comparable<? super T>>
     abstract public void insert(T data) throws Exception;
     abstract public void remove(T data) throws Exception;
 
-    public BinarySearchTreeNode<T> search(T data, BinarySearchTreeNode<T> _hot) {
+    public BinarySearchTreeNode<T> search(T data) {
         BinarySearchTreeNode<T> node = root;
 
         while (node!= null && node.data.compareTo(data) != 0) {
-            _hot = node;
             node = node.data.compareTo(data) < 0 ? node.right : node.left;
         }
         // node is null or the searched node.

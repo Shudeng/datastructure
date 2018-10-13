@@ -76,15 +76,13 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends AbstractB
     /**
      *
      * @param data
-     * @param _hot be parent of the searched node, or the last of the searched path.
      * @return
      */
     @Override
-    public BinarySearchTreeNode<T> search(T data, BinarySearchTreeNode<T> _hot) {
+    public BinarySearchTreeNode<T> search(T data) {
         BinarySearchTreeNode<T> node = root;
 
         while (node!= null && node.data.compareTo(data) != 0) {
-            _hot = node;
             node = node.data.compareTo(data) < 0 ? node.right : node.left;
         }
         // node is null or the searched node.
