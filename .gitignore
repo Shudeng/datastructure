@@ -3,5 +3,6 @@ datastructure.iml
 target/
 pom.xml
 src/main/java/com/test/
+src/test
 .gitignore
 pom.xml
