@@ -29,6 +29,7 @@ public class GraphList<V, E> extends AbstractGraph<V, E> {
             parent = null;
             priority = Integer.MAX_VALUE;
 
+
         }
 
         public LinkedList<Edge<V, E>> getEdges() {
@@ -40,7 +41,7 @@ public class GraphList<V, E> extends AbstractGraph<V, E> {
         }
     }
 
-    public static class Edge<V, E> {
+    public static class Edge<V, E> implements Comparable{
         Vertex<V, E> end_vertex;
         E data;
         int weight;
@@ -68,6 +69,12 @@ public class GraphList<V, E> extends AbstractGraph<V, E> {
 
         public EType getType() {
             return type;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            Edge<V, E> edge = (Edge<V,E>) o;
+            return weight == edge.weight ? 0 : ((weight > edge.weight) ? 1 : -1);
         }
     }
 
@@ -125,7 +132,7 @@ public class GraphList<V, E> extends AbstractGraph<V, E> {
     /**
      * reset the status of vertices and edges.
      */
-    private void reset() {
+    public void reset() {
         for (Vertex<V,E> vertex : vertices) {
             vertex.status = VStatus.UNDISCOVERED;
             vertex.dtime = -1;
@@ -246,6 +253,13 @@ public class GraphList<V, E> extends AbstractGraph<V, E> {
         }
     }
 
+
+    public void print() {
+        GraphPrinter<V, E> printer = new GraphPrinter<>(this);
+        printer.setSize(1000, 1000);
+        printer.setVisible(true);
+    }
+
     public static void main(String[] args) {
         GraphList<Integer, Integer> graph = new GraphList<>();
         for (int i=0; i<10; i++) {
@@ -290,6 +304,8 @@ public class GraphList<V, E> extends AbstractGraph<V, E> {
         }
 
         graph.dfs();
+
+        // replace the below with graph.print().
         GraphPrinter<Integer, Integer> printer = new GraphPrinter<>(graph);
         printer.setSize(1000, 1000);
         printer.setVisible(true);

@@ -3,6 +3,7 @@ package com.graph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.PriorityQueue;
 
 /**
  * Created by Wushudeng on 2018/10/19.
@@ -12,6 +13,10 @@ public class GraghMatrix<V, E> extends AbstractGraph<V, E> {
     private ArrayList<ArrayList<Edge<E>>> edges = new ArrayList<>();
     private int v_num = 0;
     private int e_num = 0;
+
+    public abstract class PriorityUpdater {
+        abstract public void update(int i, GraghMatrix<V,E> graph, PriorityQueue<Integer> queue);
+    }
 
     public static class Vertex<V> {
         V data;
@@ -30,6 +35,19 @@ public class GraghMatrix<V, E> extends AbstractGraph<V, E> {
             priority = Integer.MAX_VALUE;
 
         }
+    }
+
+    private int next_neighbor(int i, int j) {
+        while (j>-1 && !exist(i, --j));
+        return j;
+    }
+
+    private int first_neighbor(int i) {
+        return next_neighbor(i, v_num);
+    }
+
+    private void set_type(int i, int j, EType type) {
+        edges.get(i).get(j).type = type;
     }
 
     public static class Edge<E> {
@@ -124,4 +142,32 @@ public class GraghMatrix<V, E> extends AbstractGraph<V, E> {
     public void dfs() {
 
     }
+
+
+    // unchecked.
+    public void pfs(int current, PriorityQueue<Integer> queue, PriorityUpdater updater) {
+        Vertex<V> vertex = vertices.get(current);
+        vertex.priority = 0;
+        vertex.status = VStatus.VISITED;
+        vertex.parent = -1;
+        while (true) {
+            for (int neigh = first_neighbor(current); neigh>-1; neigh = next_neighbor(current, neigh)) {
+                updater.update(neigh, this, queue);
+            }
+
+            while (!queue.isEmpty()) {
+                current = queue.poll();
+                if (vertices.get(current).status == VStatus.UNDISCOVERED)
+                    break;
+            }
+
+            if (vertices.get(current).status == VStatus.VISITED)
+                break;
+
+            vertices.get(current).status = VStatus.VISITED;
+            set_type(vertices.get(current).parent, current, EType.TREE);
+        }
+    }
+
+
 }

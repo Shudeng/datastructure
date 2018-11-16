@@ -72,9 +72,8 @@ public class LeftistHeap<T extends Comparable<? super T>> {
             return heap2;
         if (heap2 == null)
             return heap1;
-
+        LeftistNode<T> tmp;
         if (heap1.key.compareTo(heap2.key) > 0) {
-            LeftistNode<T> tmp = new LeftistNode<T>();
             tmp = heap1;
             heap1 = heap2;
             heap2 = tmp;
@@ -82,7 +81,6 @@ public class LeftistHeap<T extends Comparable<? super T>> {
 
         heap1.right = meld(heap1.right, heap2);
         if (heap1.left == null || heap1.left.npl < heap1.right.npl) {
-            LeftistNode<T> tmp = new LeftistNode<T>();
             tmp = heap1.left;
             heap1.left = heap1.right;
             heap1.right = tmp;
